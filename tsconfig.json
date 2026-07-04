@@ -13,7 +13,9 @@
       "@ui/*": [
         "./src/ui-kit/*"
       ]
-    }
+    },
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": [
     "**/*.ts",

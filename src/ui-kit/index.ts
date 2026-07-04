@@ -1,5 +1,5 @@
 // Base radius: 1rem = 16px
-const BASE_RADIUS = 16
+const BASE_RADIUS = 16;
 
 export const lightTheme = {
   colors: {
@@ -41,11 +41,11 @@ export const lightTheme = {
   fonts: {
     sans: 'Inter',
   },
-} as const
+} as const;
 
 export const themes = {
   general: lightTheme,
-} as const
+} as const;
 
 export const breakpoints = {
   xs: 0,
@@ -53,10 +53,10 @@ export const breakpoints = {
   md: 500,
   lg: 800,
   xl: 1200,
-} as const
+} as const;
 
 export type AppBreakpoints = typeof breakpoints
 export type AppThemes = typeof themes
 export type Theme = typeof lightTheme
 
-export const initialTheme = 'general' as const
+export const initialTheme = 'general' as const;

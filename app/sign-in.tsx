@@ -1,21 +1,21 @@
-import { router } from 'expo-router'
-import { Text, View } from 'react-native'
+import { router } from 'expo-router';
+import { Text, View } from 'react-native';
 
-import { useSession } from '@/src/contexts/auth-context'
+import { useSession } from '@/src/contexts/auth-context';
 
 export default function SignIn() {
-  const { signIn } = useSession()
+  const { signIn } = useSession();
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text
         onPress={() => {
-          signIn()
-          router.replace('/')
+          signIn();
+          router.replace('/');
         }}
       >
         Sign In
       </Text>
     </View>
-  )
+  );
 }

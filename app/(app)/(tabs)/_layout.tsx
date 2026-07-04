@@ -1,14 +1,17 @@
-import { Href, Link, Slot, usePathname } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
+import { Href, Link, Slot, usePathname } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import type { ComponentProps } from 'react';
 
-import { FlatList, StyleSheet, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { FlatList, StyleSheet, View } from 'react-native';
+import cn from 'classnames';
+
+type IoniconName = ComponentProps<typeof Ionicons>['name']
 
 type Tab = {
-  icon: string;
-  chosenIcon: string;
-  route: Href;
-  title: string;
+  icon: IoniconName
+  chosenIcon: IoniconName
+  route: Href
+  title: string
 }
 
 const tabs: Tab[] = [
@@ -36,75 +39,36 @@ const tabs: Tab[] = [
     route: '/menu',
     title: 'Menu',
   },
-]
+];
 
 export default function TabLayout() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.verticalTabs} className='bg-[#0f172a]'>
-          <FlatList
-            data={tabs}
-            renderItem={({ item }) => (
-              <Link href={item.route} style={styles.flatListItem}>
-                {/* <Ionicons name={pathname === item.route ? item.chosenIcon : item.icon} size={24} /> */}
-              </Link>
-            )}
-          />
-        </View>
-        <Slot />
+    <View style={styles.container}>
+      <View style={styles.verticalTabs} className="bg-[#0f172a]">
+        <FlatList
+          scrollEnabled={false}
+          data={tabs}
+          contentContainerClassName="flex items-center justify-center"
+          renderItem={({ item }) => (
+            <Link href={item.route}>
+              <View className={cn('flex items-center justify-center h-[60px] w-[60px] rounded-2xl', {
+                'bg-[#2563eb]': pathname === item.route,
+              })}>
+                <Ionicons
+                  name={pathname === item.route ? item.chosenIcon : item.icon}
+                  color={pathname === item.route ? '#fff' : 'rgba(255, 255, 255, 0.6)'}
+                  size={24}
+                />
+              </View>
+            </Link>
+          )}
+        />
       </View>
-    </SafeAreaView>
-  )
-
-  // return (
-  //   <Tabs
-  //     screenOptions={{
-  //       tabBarStyle: {
-  //         backgroundColor: theme.colors.foreground,
-  //       },
-  //       tabBarActiveTintColor: '#fff',
-  //       tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.5)',
-  //     }}
-  //   >
-  //     <Tabs.Screen
-  //       name="index"
-  //       options={{
-  //         title: 'Home',
-  //         tabBarIcon: ({ color, focused }) => (
-  //           <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
-  //         ),
-  //       }}
-  //     />
-  //     <Tabs.Screen
-  //       name="receipts"
-  //       options={{
-  //         title: 'Receipts',
-  //         tabBarIcon: ({ color, focused }) => (
-  //           <Ionicons name={focused ? 'receipt' : 'receipt-outline'} color={color} size={24} />
-  //         ),
-  //       }}
-  //     />
-  //     <Tabs.Screen
-  //       name="kitchen"
-  //       options={{
-  //         title: 'Kitchen',
-  //         tabBarIcon: ({ color, focused }) => (
-  //           <Ionicons name={focused ? 'restaurant' : 'restaurant-outline'} color={color} size={24} />
-  //         ),
-  //       }}
-  //     />
-  //     <Tabs.Screen
-  //       name="menu"
-  //       options={{
-  //         title: 'Menu',
-  //         tabBarIcon: ({ color }) => <Ionicons name={'menu'} color={color} size={24} />,
-  //       }}
-  //     />
-  //   </Tabs>
-  // )
+      <Slot />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -122,7 +86,4 @@ const styles = StyleSheet.create({
   pageContainer: {
     flex: 1,
   },
-  flatListItem: {
-
-  },
-})
+});
