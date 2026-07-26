@@ -279,10 +279,11 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
+         * @param {string} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAll: async (page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        findAll: async (page?: number, limit?: number, status?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/orders`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -303,6 +304,10 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['limit'] = limit;
             }
 
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
             localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -316,11 +321,11 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findOne: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        findOne: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('findOne', 'id', id)
             const localVarPath = `/orders/{id}`
@@ -349,14 +354,14 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        remove: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        removeActiveReceipt: async (id: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
-            assertParamExists('remove', 'id', id)
-            const localVarPath = `/orders/{id}`
+            assertParamExists('removeActiveReceipt', 'id', id)
+            const localVarPath = `/orders/remove-active-receipt/{id}`
                 .replace('{id}', encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -365,10 +370,11 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            localVarHeaderParameter['Accept'] = 'application/json';
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -381,12 +387,12 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update: async (id: string, updateOrderDto: UpdateOrderDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: number, updateOrderDto: UpdateOrderDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
             // verify required parameter 'updateOrderDto' is not null or undefined
@@ -442,22 +448,23 @@ export const OrdersApiFp = function(configuration?: Configuration) {
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
+         * @param {string} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Order>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findAll(page, limit, options);
+        async findAll(page?: number, limit?: number, status?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Order>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findAll(page, limit, status, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrdersApi.findAll']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findOne(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Order>> {
+        async findOne(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Order>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.findOne(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrdersApi.findOne']?.[localVarOperationServerIndex]?.url;
@@ -465,24 +472,24 @@ export const OrdersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async remove(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.remove(id, options);
+        async removeActiveReceipt(id: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Order>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.removeActiveReceipt(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['OrdersApi.remove']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['OrdersApi.removeActiveReceipt']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async update(id: string, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Order>> {
+        async update(id: number, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Order>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.update(id, updateOrderDto, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrdersApi.update']?.[localVarOperationServerIndex]?.url;
@@ -510,38 +517,39 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
          * 
          * @param {number} [page] 
          * @param {number} [limit] 
+         * @param {string} [status] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<Order>> {
-            return localVarFp.findAll(page, limit, options).then((request) => request(axios, basePath));
+        findAll(page?: number, limit?: number, status?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Order>> {
+            return localVarFp.findAll(page, limit, status, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findOne(id: string, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
+        findOne(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
             return localVarFp.findOne(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        remove(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.remove(id, options).then((request) => request(axios, basePath));
+        removeActiveReceipt(id: number, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
+            return localVarFp.removeActiveReceipt(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @param {string} id 
+         * @param {number} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        update(id: string, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
+        update(id: number, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
             return localVarFp.update(id, updateOrderDto, options).then((request) => request(axios, basePath));
         },
     };
@@ -565,41 +573,42 @@ export class OrdersApi extends BaseAPI {
      * 
      * @param {number} [page] 
      * @param {number} [limit] 
+     * @param {string} [status] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig) {
-        return OrdersApiFp(this.configuration).findAll(page, limit, options).then((request) => request(this.axios, this.basePath));
+    public findAll(page?: number, limit?: number, status?: string, options?: RawAxiosRequestConfig) {
+        return OrdersApiFp(this.configuration).findAll(page, limit, status, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public findOne(id: string, options?: RawAxiosRequestConfig) {
+    public findOne(id: number, options?: RawAxiosRequestConfig) {
         return OrdersApiFp(this.configuration).findOne(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {number} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public remove(id: string, options?: RawAxiosRequestConfig) {
-        return OrdersApiFp(this.configuration).remove(id, options).then((request) => request(this.axios, this.basePath));
+    public removeActiveReceipt(id: number, options?: RawAxiosRequestConfig) {
+        return OrdersApiFp(this.configuration).removeActiveReceipt(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @param {string} id 
+     * @param {number} id 
      * @param {UpdateOrderDto} updateOrderDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public update(id: string, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig) {
+    public update(id: number, updateOrderDto: UpdateOrderDto, options?: RawAxiosRequestConfig) {
         return OrdersApiFp(this.configuration).update(id, updateOrderDto, options).then((request) => request(this.axios, this.basePath));
     }
 }
