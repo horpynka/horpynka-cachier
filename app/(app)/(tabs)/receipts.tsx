@@ -11,17 +11,12 @@ export default function AboutScreen() {
 
   useLayoutEffect(() => {
     ordersApi.findAll(1, 10).then((response) => {
-      console.log(response.data);
       setOrders(response.data);
     });
   }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>About screen</Text>
-      <Pressable onPress={signOut} style={styles.button}>
-        <Text style={styles.buttonText}>Sign out</Text>
-      </Pressable>
     </View>
   );
 }

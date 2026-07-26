@@ -4,6 +4,7 @@ import type { ComponentProps } from 'react';
 
 import { FlatList, StyleSheet, View } from 'react-native';
 import cn from 'classnames';
+import { Header } from '@/src/components/header';
 
 type IoniconName = ComponentProps<typeof Ionicons>['name']
 
@@ -53,9 +54,11 @@ export default function TabLayout() {
           contentContainerClassName="flex items-center justify-center"
           renderItem={({ item }) => (
             <Link href={item.route}>
-              <View className={cn('flex items-center justify-center h-[60px] w-[60px] rounded-2xl', {
-                'bg-[#2563eb]': pathname === item.route,
-              })}>
+              <View
+                className={cn('flex items-center justify-center h-[60px] w-[60px] rounded-2xl', {
+                  'bg-[#2563eb]': pathname === item.route,
+                })}
+              >
                 <Ionicons
                   name={pathname === item.route ? item.chosenIcon : item.icon}
                   color={pathname === item.route ? '#fff' : 'rgba(255, 255, 255, 0.6)'}
@@ -66,7 +69,12 @@ export default function TabLayout() {
           )}
         />
       </View>
-      <Slot />
+      <View className="flex-1 flex flex-col bg-background text-foreground">
+        <Header />
+        <View className='h-full p-5'>
+          <Slot />
+        </View>
+      </View>
     </View>
   );
 }

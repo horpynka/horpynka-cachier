@@ -23,16 +23,21 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
+export interface Category {
+    'id': number;
+    'dishes': Array<Dish>;
+    'products': Array<Product>;
+}
 export interface CreateOrderDto {
     /**
      * @default CREATED
      */
     'status'?: CreateOrderDtoStatusEnum;
-    'order_price': number;
-    'paid_with_cash': number;
-    'paid_with_card': number;
-    'refunded_with_cash': number;
-    'refunded_with_card': number;
+    'orderPrice': number;
+    'paidWithCash': number;
+    'paidWithCard': number;
+    'refundedWithCash': number;
+    'refundedWithCard': number;
 }
 
 export const CreateOrderDtoStatusEnum = {
@@ -46,16 +51,41 @@ export const CreateOrderDtoStatusEnum = {
 
 export type CreateOrderDtoStatusEnum = typeof CreateOrderDtoStatusEnum[keyof typeof CreateOrderDtoStatusEnum];
 
+export interface Dish {
+    'id': number;
+    'name': string;
+    'categoryId': number | null;
+    'category': Category;
+    'ownPrice': number;
+    'sellingPrice': number;
+    'selling': boolean;
+    'createdAt': string;
+    'updatedAt': string;
+    'dishIngredients': Array<DishIngredient>;
+}
+export interface DishIngredient {
+    'id': number;
+    'dishId': number | null;
+    'ingredientId': number | null;
+    'dish': Dish;
+    'ingredient': Ingredient;
+}
+export interface Ingredient {
+    'id': number;
+    'measurementUnit': string;
+    'dishIngredients': Array<DishIngredient>;
+}
 export interface Order {
     'id': number;
     'status': OrderStatusEnum;
-    'created_at': string;
-    'updated_at': string;
-    'order_price': number;
-    'paid_with_cash': number;
-    'paid_with_card': number;
-    'refunded_with_cash': number;
-    'refunded_with_card': number;
+    'createdAt': string;
+    'updatedAt': string;
+    'orderPrice': number;
+    'paidWithCash': number;
+    'paidWithCard': number;
+    'refundedWithCash': number;
+    'refundedWithCard': number;
+    'orderItems': Array<OrderItem>;
 }
 
 export const OrderStatusEnum = {
@@ -69,16 +99,39 @@ export const OrderStatusEnum = {
 
 export type OrderStatusEnum = typeof OrderStatusEnum[keyof typeof OrderStatusEnum];
 
+export interface OrderItem {
+    'id': number;
+    'sellingPrice': number;
+    'discount': string | null;
+    'discountType': string;
+    'dishId': number | null;
+    'productId': number | null;
+    'orderId': number | null;
+    'dish': Dish | null;
+    'product': Product | null;
+    'order': Order;
+}
+export interface Product {
+    'id': number;
+    'name': string;
+    'ownPrice': number;
+    'sellingPrice': number;
+    'categoryId': number | null;
+    'category': Category;
+    'selling': boolean;
+    'createdAt': string;
+    'updatedAt': string;
+}
 export interface UpdateOrderDto {
     /**
      * @default CREATED
      */
     'status'?: UpdateOrderDtoStatusEnum;
-    'order_price'?: number;
-    'paid_with_cash'?: number;
-    'paid_with_card'?: number;
-    'refunded_with_cash'?: number;
-    'refunded_with_card'?: number;
+    'orderPrice'?: number;
+    'paidWithCash'?: number;
+    'paidWithCard'?: number;
+    'refundedWithCash'?: number;
+    'refundedWithCard'?: number;
 }
 
 export const UpdateOrderDtoStatusEnum = {
@@ -190,7 +243,6 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
-         * @summary Create an order
          * @param {CreateOrderDto} createOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -225,17 +277,12 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary List orders
-         * @param {number} page 
-         * @param {number} limit 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAll: async (page: number, limit: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'page' is not null or undefined
-            assertParamExists('findAll', 'page', page)
-            // verify required parameter 'limit' is not null or undefined
-            assertParamExists('findAll', 'limit', limit)
+        findAll: async (page?: number, limit?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/orders`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -269,7 +316,6 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary Get an order by id
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -303,7 +349,6 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary Delete an order
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -336,7 +381,6 @@ export const OrdersApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @summary Update an order
          * @param {string} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
@@ -384,7 +428,6 @@ export const OrdersApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Create an order
          * @param {CreateOrderDto} createOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -397,13 +440,12 @@ export const OrdersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary List orders
-         * @param {number} page 
-         * @param {number} limit 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findAll(page: number, limit: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Order>>> {
+        async findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Order>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.findAll(page, limit, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrdersApi.findAll']?.[localVarOperationServerIndex]?.url;
@@ -411,7 +453,6 @@ export const OrdersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get an order by id
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -424,7 +465,6 @@ export const OrdersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Delete an order
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -437,7 +477,6 @@ export const OrdersApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Update an order
          * @param {string} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
@@ -460,7 +499,6 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
     return {
         /**
          * 
-         * @summary Create an order
          * @param {CreateOrderDto} createOrderDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -470,18 +508,16 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @summary List orders
-         * @param {number} page 
-         * @param {number} limit 
+         * @param {number} [page] 
+         * @param {number} [limit] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findAll(page: number, limit: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<Order>> {
+        findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig): AxiosPromise<Array<Order>> {
             return localVarFp.findAll(page, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Get an order by id
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -491,7 +527,6 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @summary Delete an order
          * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -501,7 +536,6 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @summary Update an order
          * @param {string} id 
          * @param {UpdateOrderDto} updateOrderDto 
          * @param {*} [options] Override http request option.
@@ -519,7 +553,6 @@ export const OrdersApiFactory = function (configuration?: Configuration, basePat
 export class OrdersApi extends BaseAPI {
     /**
      * 
-     * @summary Create an order
      * @param {CreateOrderDto} createOrderDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -530,19 +563,17 @@ export class OrdersApi extends BaseAPI {
 
     /**
      * 
-     * @summary List orders
-     * @param {number} page 
-     * @param {number} limit 
+     * @param {number} [page] 
+     * @param {number} [limit] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public findAll(page: number, limit: number, options?: RawAxiosRequestConfig) {
+    public findAll(page?: number, limit?: number, options?: RawAxiosRequestConfig) {
         return OrdersApiFp(this.configuration).findAll(page, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
-     * @summary Get an order by id
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -553,7 +584,6 @@ export class OrdersApi extends BaseAPI {
 
     /**
      * 
-     * @summary Delete an order
      * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -564,7 +594,6 @@ export class OrdersApi extends BaseAPI {
 
     /**
      * 
-     * @summary Update an order
      * @param {string} id 
      * @param {UpdateOrderDto} updateOrderDto 
      * @param {*} [options] Override http request option.
