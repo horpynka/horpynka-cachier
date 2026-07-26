@@ -24,7 +24,7 @@ export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdA
         </View>
         <View className="flex flex-col">
           <Text>{moneyService.toMoney(orderPrice)}</Text>
-          <Text></Text>
+          <Text>test</Text>
         </View>
       </View>
     </View>
