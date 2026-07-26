@@ -1,5 +1,6 @@
 import { Order } from '@/src/api/generated';
 import { DATE_FORMATS, dateFns } from '@/src/utils/date-fns';
+import { moneyService } from '@/src/utils/money-service';
 import { Text, View } from 'react-native';
 
 type Props = {
@@ -22,7 +23,7 @@ export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdA
           </View>
         </View>
         <View className="flex flex-col">
-          <Text>{orderPrice}</Text>
+          <Text>{moneyService.toMoney(orderPrice)}</Text>
           <Text></Text>
         </View>
       </View>
