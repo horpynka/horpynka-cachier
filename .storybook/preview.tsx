@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react-native-web-vite'
 
 const preview: Preview = {
+  tags: ['autodocs'],
   parameters: {
     controls: {
       matchers: {
