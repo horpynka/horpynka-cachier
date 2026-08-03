@@ -31,3 +31,5 @@ yarn-error.log*
 
 # Editor (optional — see note above)
 .vscode/
+*storybook.log
+storybook-static

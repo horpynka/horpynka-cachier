@@ -48,7 +48,8 @@
         {
           "initialOrientation": "LANDSCAPE"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,
