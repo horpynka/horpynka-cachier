@@ -16,7 +16,6 @@ type Props = PropsWithChildren<{
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
   title?: string
-  description?: string
   showCloseButton?: boolean
   closeOnOverlayClick?: boolean
   actions?: ModalAction[]
@@ -26,7 +25,6 @@ export const Modal = ({
   isOpen = false,
   setIsOpen,
   title,
-  description,
   children,
   showCloseButton = true,
   closeOnOverlayClick = true,
@@ -49,10 +47,9 @@ export const Modal = ({
           className="w-full max-w-lg max-h-[90%] rounded-3xl border border-border bg-card shadow-2xl"
         >
           <View className="px-5 pt-5 pb-4">
-            <View className="flex-row items-start justify-between gap-3">
-              <View className="flex-1 min-w-0">
+            <View className="flex flex-row items-center justify-between gap-3">
+              <View>
                 {title && <Text className="text-lg font-bold leading-tight text-card-foreground">{title}</Text>}
-                {description && <Text className="mt-1 text-sm text-muted-foreground">{description}</Text>}
               </View>
 
               {showCloseButton && (

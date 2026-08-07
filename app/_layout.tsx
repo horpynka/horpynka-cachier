@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { SessionProvider, useSession } from "@/src/contexts/auth-context"
 import { SplashScreenController } from "@/src/splash"
 import "@/src/styles/global.css"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { tanstackClient } from "@/src/api/client"
 
 export default function Root() {
   return (
@@ -24,18 +26,20 @@ function RootNavigator() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={!!session}>
-        <Stack.Screen options={{ orientation: "portrait" }} name="(app)" />
-      </Stack.Protected>
+    <QueryClientProvider client={tanstackClient}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Protected guard={!!session}>
+          <Stack.Screen options={{ orientation: "portrait" }} name="(app)" />
+        </Stack.Protected>
 
-      <Stack.Protected guard={!session}>
-        <Stack.Screen options={{ orientation: "portrait" }} name="sign-in" />
-      </Stack.Protected>
+        <Stack.Protected guard={!session}>
+          <Stack.Screen options={{ orientation: "portrait" }} name="sign-in" />
+        </Stack.Protected>
 
-      <Stack.Protected guard={__DEV__}>
-        <Stack.Screen name="storybook" />
-      </Stack.Protected>
-    </Stack>
+        <Stack.Protected guard={__DEV__}>
+          <Stack.Screen name="storybook" />
+        </Stack.Protected>
+      </Stack>
+    </QueryClientProvider>
   )
 }

@@ -1,14 +1,12 @@
 import { ordersApi } from '@/src/api/client';
 import { Order } from '@/src/api/generated';
 import { ActiveReceiptList } from '@/src/routes/home/components/active-receipt-list';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 
 export default function Index() {
-  const [receipts, setReceipts] = useState<Order[]>([]);
-  useEffect(() => {
-    ordersApi.findAll().then((res) => setReceipts(res.data));
-  }, []);
+  const { data: receipts = []} = useQuery({queryKey: ['receipts'], queryFn: () => ordersApi.findAll(), select: (data) => data.data});
 
   return (
     <View className="flex flex-row justify-between">
