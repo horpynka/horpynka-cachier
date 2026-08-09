@@ -1,5 +1,6 @@
 import { Order } from "@/src/api/generated"
 import { useOrdersApi } from "@/src/api/operations/ordersApi"
+import { useStore } from "@/src/store"
 import { Modal } from "@/src/ui-kit/components/modal"
 import { DATE_FORMATS, dateFns } from "@/src/utils/date-fns"
 import { moneyService } from "@/src/utils/money-service"
@@ -12,16 +13,25 @@ type Props = {
   data: Order
 }
 
-export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdAt } }: Props) => {
+export const ActiveReceiptCard = ({ data }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
+  const setReceipt = useStore((s) => s.setReceipt)
   const router = useRouter()
 
   const { mutateDeleteReceipt } = useOrdersApi()
 
+  const { id, orderItems, orderPrice, createdAt } = data;
+
   return (
     <View className="h-22 bg-card rounded-3xl border border-border flex items-stretch">
-      <TouchableOpacity onPress={() => router.push(`/receipts/${id}`)} className="flex flex-row justify-between">
+      <TouchableOpacity
+        onPress={() => {
+          router.push(`/receipts/${id}`);
+          setReceipt(data);
+        }}
+        className="flex flex-row justify-between"
+      >
         <View className="flex-1 flex flex-row justify-between items-center border-r border-border ">
           <View className="flex justify-between p-4">
             <View className="flex flex-col">

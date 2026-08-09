@@ -9,7 +9,7 @@ export const useOrdersApi = () => {
       ordersApi.removeActiveReceipt(id),
     onSettled: (_data, _error, { onSettledCallback }) => {
       queryClient.invalidateQueries({ queryKey: ["receipts"] })
-      onSettledCallback && onSettledCallback?.()
+      onSettledCallback && onSettledCallback()
     },
   })
 
