@@ -1,33 +1,27 @@
-import { ordersApi } from "@/src/api/client"
 import { Order } from "@/src/api/generated"
+import { useOrdersApi } from "@/src/api/operations/ordersApi"
 import { Modal } from "@/src/ui-kit/components/modal"
 import { DATE_FORMATS, dateFns } from "@/src/utils/date-fns"
 import { moneyService } from "@/src/utils/money-service"
 import { Ionicons } from "@expo/vector-icons"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useRouter } from "expo-router"
 import { useState } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 
 type Props = {
-  data: Order;
+  data: Order
 }
 
 export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdAt } }: Props) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const queryClient = useQueryClient()
+  const router = useRouter()
 
-  const mutateDeleteReceipt = useMutation({
-    mutationFn: (id: number) => ordersApi.removeActiveReceipt(id),
-    onSettled: () => {
-      setIsDeleteModalOpen(false)
-      queryClient.invalidateQueries({ queryKey: ['receipts'] })
-    }
-  })
+  const { mutateDeleteReceipt } = useOrdersApi()
 
   return (
     <View className="h-22 bg-card rounded-3xl border border-border flex items-stretch">
-      <View className="flex flex-row justify-between">
+      <TouchableOpacity onPress={() => router.push(`/receipts/${id}`)} className="flex flex-row justify-between">
         <View className="flex-1 flex flex-row justify-between items-center border-r border-border ">
           <View className="flex justify-between p-4">
             <View className="flex flex-col">
@@ -51,7 +45,7 @@ export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdA
         >
           <Ionicons color="#dc2626" name="trash" size={20} />
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
       <Modal
         actions={[
           {
@@ -64,7 +58,8 @@ export const ActiveReceiptCard = ({ data: { id, orderItems, orderPrice, createdA
           {
             label: "Видалити",
             variant: "destructive",
-            onClick: () => mutateDeleteReceipt.mutate(id),
+            onClick: () =>
+              mutateDeleteReceipt.mutate({ params: { id }, onSettledCallback: () => setIsDeleteModalOpen(false) }),
           },
         ]}
         title={`Видалити чек №${id}?`}

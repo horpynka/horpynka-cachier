@@ -1,0 +1,1 @@
+export { ReceiptSidebar } from './receipt-sidebar'

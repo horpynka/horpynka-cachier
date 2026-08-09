@@ -1,6 +1,7 @@
 import {create} from 'zustand';
-import { createReceiptsStore } from './receiptsStore';
+import { createReceiptStore } from './receiptStore';
+import { ReceiptsStore } from './receiptStore';
 
-export const useStore = create((set) => ({
-  ...createReceiptsStore(set),
+export const useStore = create<ReceiptsStore>((set, get, api) => ({
+  ...createReceiptStore(set, get, api),
 }));
