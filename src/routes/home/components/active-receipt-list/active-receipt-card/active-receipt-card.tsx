@@ -1,5 +1,3 @@
-import { Order } from "@/src/api/generated"
-import { useOrdersApi } from "@/src/api/operations/ordersApi"
 import { useStore } from "@/src/store"
 import { Modal } from "@/src/ui-kit/components/modal"
 import { DATE_FORMATS, dateFns } from "@/src/utils/date-fns"
@@ -8,6 +6,8 @@ import { Ionicons } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
 import { useState } from "react"
 import { Text, TouchableOpacity, View } from "react-native"
+import { Order, useOrdersApi } from "@horpynka/api-sdk"
+
 
 type Props = {
   data: Order

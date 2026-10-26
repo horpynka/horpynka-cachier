@@ -1,4 +1,3 @@
-import { useOrdersApi } from "@/src/api/operations/ordersApi"
 import { useStore } from "@/src/store"
 import { Modal } from "@/src/ui-kit/components/modal"
 import { Ionicons } from "@expo/vector-icons"
@@ -6,6 +5,7 @@ import { useRouter } from "expo-router"
 import React, { useState } from "react"
 import { View, Text, TouchableOpacity, FlatList } from "react-native"
 import { OrderItem } from "./components/order-item"
+import { useOrdersApi } from "@horpynka/api-sdk"
 
 type Props = {}
 

@@ -41,14 +41,14 @@ const tabs: Tab[] = [
     title: "Menu",
   },
   ...(process.env.EXPO_PUBLIC_DEVELOPMENT === "true"
-    ? [
+    ? ([
         {
           icon: "cog-outline",
           chosenIcon: "cog",
           route: "/storybook",
           title: "Storybook",
         },
-      ]
+      ] satisfies Tab[])
     : []),
 ]
 

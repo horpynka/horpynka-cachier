@@ -1,11 +1,11 @@
-import { OrderItem as OrderItemType } from "@/src/api/generated"
 import { moneyService } from "@/src/utils/money-service"
 import { Ionicons } from "@expo/vector-icons"
+import { OrderItem as OrderItemType } from "@horpynka/api-sdk"
 import React from "react"
 import { Text, TouchableOpacity, View } from "react-native"
 
 type Props = {
-  data: OrderItemType
+  data: OrderItemType;
 }
 
 export const OrderItem = ({ data }: Props) => {

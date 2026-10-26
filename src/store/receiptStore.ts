@@ -1,5 +1,5 @@
+import { Order } from "@horpynka/api-sdk";
 import { StateCreator } from "zustand";
-import { Order } from "../api/generated";
 
 export type ReceiptsStore = {
   receipt: Order | null;

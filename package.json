@@ -4,7 +4,6 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start --tunnel",
-    "generate-api-client": "npx openapi-generator-cli generate -i http://localhost:3000/docs-json -g typescript-axios -o src/api/generated",
     "reset-project": "node ./scripts/reset-project.js",
     "prebuild": "expo prebuild --clean",
     "android": "expo run:android",
@@ -20,6 +19,8 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.14",
+    "@hookform/resolvers": "^5.7.1",
+    "@horpynka/api-sdk": "^1.0.32",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-community/netinfo": "11.4.1",
@@ -54,6 +55,7 @@
     "nativewind": "^4.2.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-hook-form": "^7.85.0",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
     "react-native-reanimated": "~4.1.1",
@@ -63,6 +65,7 @@
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.5.1",
     "storybook": "^10.5.6",
+    "yup": "^1.7.1",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

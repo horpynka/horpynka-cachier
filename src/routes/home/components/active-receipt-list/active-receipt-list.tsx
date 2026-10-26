@@ -1,6 +1,6 @@
 import { FlatList } from 'react-native';
 import { ActiveReceiptCard } from './active-receipt-card';
-import { Order } from '@/src/api/generated';
+import { Order } from '@horpynka/api-sdk';
 
 type Props = {
   receipts: Order[]
