@@ -1,6 +1,7 @@
 import  { useEffect, useCallback, useReducer } from 'react';
-import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+
+import { secureStoreService } from '@/src/utils/secure-store-service';
 
 type UseStateHook<T> = [[boolean, T | null], (value: T | null) => void];
 
@@ -26,9 +27,9 @@ export async function setStorageItemAsync(key: string, value: string | null) {
     }
   } else {
     if (value == null) {
-      await SecureStore.deleteItemAsync(key);
+      await secureStoreService.deleteItem(key);
     } else {
-      await SecureStore.setItemAsync(key, value);
+      await secureStoreService.setItem(key, value);
     }
   }
 }
@@ -48,7 +49,7 @@ export function useStorageState(key: string): UseStateHook<string> {
         console.error('Local storage is unavailable:', e);
       }
     } else {
-      SecureStore.getItemAsync(key).then((value: string | null) => {
+      secureStoreService.getItem(key).then((value: string | null) => {
         setState(value);
       });
     }
