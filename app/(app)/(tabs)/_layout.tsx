@@ -2,7 +2,7 @@ import { Href, Link, Slot, usePathname } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import type { ComponentProps } from "react"
 
-import { FlatList, StyleSheet, View } from "react-native"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 import cn from "classnames"
 import { Header } from "@/src/components/header"
 
@@ -21,6 +21,12 @@ const tabs: Tab[] = [
     chosenIcon: "home-sharp",
     route: "/",
     title: "Головна",
+  },
+  {
+    icon: "archive-outline",
+    chosenIcon: "archive",
+    route: "/archive",
+    title: "Архів",
   },
   {
     icon: "receipt-outline",
@@ -52,31 +58,51 @@ const tabs: Tab[] = [
     : []),
 ]
 
+const isTabActive = (pathname: string, route: Href) => {
+  if (route === "/archive") {
+    return pathname === "/archive" || pathname.startsWith("/archive/")
+  }
+
+  return pathname === route
+}
+
 export default function TabLayout() {
   const pathname = usePathname()
 
   return (
     <View style={styles.container}>
-      <View style={styles.verticalTabs} className="bg-[#0f172a]">
+      <View style={styles.verticalTabs} className="bg-slate-900">
         <FlatList
           scrollEnabled={false}
           data={tabs}
           contentContainerClassName="flex items-center justify-center"
-          renderItem={({ item }) => (
-            <Link href={item.route}>
-              <View
-                className={cn("flex items-center justify-center h-[60px] w-[60px] rounded-2xl", {
-                  "bg-[#2563eb]": pathname === item.route,
-                })}
-              >
-                <Ionicons
-                  name={pathname === item.route ? item.chosenIcon : item.icon}
-                  color={pathname === item.route ? "#fff" : "rgba(255, 255, 255, 0.6)"}
-                  size={24}
-                />
-              </View>
-            </Link>
-          )}
+          renderItem={({ item }) => {
+            const active = isTabActive(pathname, item.route)
+
+            return (
+              <Link href={item.route}>
+                <View
+                  className={cn("w-full flex-col items-center justify-center gap-1 rounded-2xl py-2", {
+                    "bg-primary": active,
+                  })}
+                >
+                  <Ionicons
+                    name={active ? item.chosenIcon : item.icon}
+                    color={active ? "#fff" : "rgba(255, 255, 255, 0.6)"}
+                    size={20}
+                  />
+                  <Text
+                    className={cn(
+                      "text-[10px] font-semibold",
+                      active ? "text-primary-foreground" : "text-white/60",
+                    )}
+                  >
+                    {item.title}
+                  </Text>
+                </View>
+              </Link>
+            )
+          }}
         />
       </View>
       <View className="flex-1 flex flex-col bg-background text-foreground">
