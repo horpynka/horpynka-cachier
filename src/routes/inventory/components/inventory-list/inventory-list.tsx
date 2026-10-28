@@ -1,19 +1,21 @@
 import { Ionicons } from '@expo/vector-icons';
-import { InventoryDto } from '@horpynka/api-sdk';
+import { InventoryDto, useInventoryApi } from '@horpynka/api-sdk';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { lightTheme } from '@/src/ui-kit';
 
 import { InventoryCard } from '../inventory-card';
+import { useQuery } from '@tanstack/react-query';
 
 type Props = {
-  inventories: InventoryDto[];
-  isLoading: boolean;
   isCreating: boolean;
   onCreate: () => void;
 };
 
-export const InventoryList = ({ inventories, isLoading, isCreating, onCreate }: Props) => {
+export const InventoryList = ({ isCreating, onCreate }: Props) => {
+  const { getInventoriesQuery, mutateStartInventory } = useInventoryApi();
+  const { data: inventories = [], isPending: isLoading } = useQuery<InventoryDto[]>(getInventoriesQuery());
+  
   const isEmpty = !isLoading && inventories.length === 0;
 
   return (
