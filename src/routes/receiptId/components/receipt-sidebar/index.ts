@@ -1,1 +1,1 @@
-export { ReceiptSidebar } from './receipt-sidebar'
+export { ReceiptSidebar } from './receipt-sidebar';
