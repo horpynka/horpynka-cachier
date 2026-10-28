@@ -1,0 +1,122 @@
+---
+description: Cashier app structure, component style, NativeWind, and API usage
+globs: "**/*.{js,jsx,ts,tsx}"
+alwaysApply: false
+---
+
+# Cashier
+
+Expo Router app. `app/` is routing. Feature UI lives in `src/`. Style with NativeWind. Send requests through `@horpynka/api-sdk`.
+
+## Where code goes
+
+- `app/` — layouts and screens. A screen composes feature components and loads its data. Keep the JSX thin.
+- `src/routes/<feature>/components/<name>/` — UI for one screen. Home is `src/routes/home`. A receipt is `src/routes/receiptId`.
+- `src/components/` — chrome shared by several routes, such as the header.
+- `src/ui-kit/components/<name>/` — domain-free primitives: button, text field, modal. Add a story in `.rnstorybook/stories/` in the same change, following `Button.stories.tsx`.
+- `src/contexts/<name>/` — React context, barreled from `index.ts`.
+- `src/store/` — Zustand. One slice file per domain, composed in `src/store/index.ts`.
+- `src/utils/<name>-service.ts` — a class and its singleton (`moneyService`, `dateFns`, `yupService`, `secureStoreService`).
+- `src/initializers.ts` — the only place that calls `initApiClient`.
+
+A component folder is `kebab-case` and holds `<name>.tsx` plus `index.ts`:
+
+```ts
+export { ActiveReceiptList } from './active-receipt-list';
+```
+
+## Routing
+
+Tab screens live in `app/(app)/(tabs)/`. That layout already renders the rail, `Header`, and page padding. Auth gates stay in `app/_layout.tsx` via `Stack.Protected`. Read the session with `useSession()`.
+
+Route files use a default export. Every other module uses a named export.
+
+Leave `ios/`, `android/`, and `.expo/` alone.
+
+`kitchen.tsx`, `menu.tsx`, `receipts/index.tsx`, and `+not-found.tsx` are Expo template leftovers. Follow `sign-in.tsx` and `app/(app)/(tabs)/index.tsx` instead.
+
+## Components
+
+ESLint is the style source: single quotes and semicolons. Older files that skip semicolons or use double quotes are drift. New code follows ESLint.
+
+- Functions are `PascalCase`. Files and folders are `kebab-case`.
+- Local props type is `Props`. Export a props type from ui-kit (`ButtonProps`) when callers need it.
+- Cross-module imports use `@/src/...`. Imports inside one feature are relative.
+- Import a primitive from its folder barrel: `@/src/ui-kit/components/button`.
+- Import the hooks and types you use from `react`. Add a default `React` import only when you need the namespace (`React.ReactNode`).
+- New press targets use `Pressable`.
+- User-facing copy is Ukrainian.
+- State that one screen owns stays in `useState`. Use Zustand when another screen reads it, as with the open receipt.
+
+```tsx
+type Props = {
+  receipts: Order[];
+};
+
+export const ActiveReceiptList = ({ receipts }: Props) => {
+  return (
+    <FlatList
+      data={receipts}
+      contentContainerClassName="gap-3"
+      renderItem={({ item }) => <ActiveReceiptCard data={item} />}
+    />
+  );
+};
+```
+
+Skip empty `type Props = {}` and unused `props` parameters.
+
+## Styling
+
+Style with NativeWind `className`. New UI does not add `StyleSheet`.
+
+Use the semantic tokens in `tailwind.config.js`: `bg-background`, `bg-card`, `text-foreground`, `text-muted-foreground`, `text-card-foreground`, `border-border`, `bg-primary`, `bg-destructive`, `bg-muted`. A color that already has a token stays a token. `#0f172a`, `#2563eb`, and `#dc2626` are `slate-900`, `primary`, and `destructive`.
+
+Conditional classes go through `cn` from `classnames`:
+
+```tsx
+className={cn(
+  'h-12 flex-row items-center rounded-xl border bg-card px-3',
+  error ? 'border-destructive' : 'border-input',
+)}
+```
+
+Ui-kit variants are string maps keyed by a union (`ButtonVariant`), merged with `cn`. Cards and panels use `rounded-3xl border border-border bg-card`. The receipt screen splits the list at `max-w-[60%]` and the sidebar at `max-w-[40%]`.
+
+`src/ui-kit/index.ts` (`lightTheme`) mirrors the Tailwind theme for props that cannot take a class, such as icon `color` and `placeholderTextColor`. Change a color in both files.
+
+This is a landscape cashier. New tab screens fill the slot the tab layout already padded. Do not wrap them in another safe area, and do not rebuild the rail or header.
+
+## Data
+
+Screens and components do not call axios, `fetch`, or the generated API classes.
+
+```tsx
+const { getOrdersQuery, mutateDeleteReceipt } = useOrdersApi();
+const { data: receipts = [] } = useQuery(getOrdersQuery());
+
+mutateDeleteReceipt.mutate({
+  params: { id },
+  onSettledCallback: () => setIsDeleteModalOpen(false),
+});
+```
+
+`getXQuery` is a TanStack `queryOptions` factory. Pass it to `useQuery`. Mutations are named `mutateX` and take `{ params, onSettledCallback }`. The SDK invalidates its own query key.
+
+When the hook does not exist yet, add it in `api-sdk` under the Horpynka API SDK rule. Do not hand-roll the call in cashier.
+
+- Session comes from `useSession()` in `@/src/contexts/auth-context`. Tokens go through `secureStoreService`.
+- Forms use `react-hook-form`, `yupResolver`, and `yupService`. A field is `TextField` with `{...register('email')}`.
+- Money is integer cents. Format it with `moneyService.toMoney`.
+- Dates go through `dateFns` and `DATE_FORMATS` (Ukrainian locale). Components do not import `date-fns`.
+
+Add shared client state as a Zustand slice, then spread it into `useStore`:
+
+```ts
+export const createReceiptStore: StateCreator<ReceiptsStore> = (set) => ({
+  receipt: null,
+  setReceipt: (receipt) => set(() => ({ receipt })),
+});
+```
+
+Select one field: `useStore((s) => s.receipt)`.

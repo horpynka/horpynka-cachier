@@ -20,7 +20,7 @@
     "@expo/vector-icons": "^15.0.3",
     "@gorhom/bottom-sheet": "^5.2.14",
     "@hookform/resolvers": "^5.7.1",
-    "@horpynka/api-sdk": "^1.0.32",
+    "@horpynka/api-sdk": "^1.0.33",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-community/netinfo": "11.4.1",

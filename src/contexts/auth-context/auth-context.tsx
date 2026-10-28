@@ -5,7 +5,7 @@ import { secureStoreService } from '@/src/utils/secure-store-service';
 import { AxiosError } from 'axios';
 
 const AuthContext = createContext<{
-    signIn: (signInUserDTO: SignInUserDTO) => Promise<string | null>;
+  signIn: (signInUserDTO: SignInUserDTO) => Promise<string | null>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;

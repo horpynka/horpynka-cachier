@@ -1557,10 +1557,10 @@
   dependencies:
     "@standard-schema/utils" "^0.3.0"
 
-"@horpynka/api-sdk@^1.0.32":
-  version "1.0.32"
-  resolved "https://registry.yarnpkg.com/@horpynka/api-sdk/-/api-sdk-1.0.32.tgz#ca90593e801dcd7ddb2b7e9296a1c621ce962298"
-  integrity sha512-kcRTw4FnWpktmYgr42PjYjjnwxj+uQ7yR7UyXE/bqSYCWqaOqe/vrzCg9ohzYlSoncobPh7zUo36/DlE+zZ14g==
+"@horpynka/api-sdk@^1.0.33":
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@horpynka/api-sdk/-/api-sdk-1.0.33.tgz#92f7670fb05239618fe1c141be0a2abd12b5765f"
+  integrity sha512-Yreo/tqBlbJoE9+h7KfY6rsK9MqsV3VuWAPB70rrZht0yeWFEhWJ2XPaxcPxp9Kvjn95R6U1K4TIygmRhrwfRA==
 
 "@humanfs/core@^0.19.2":
   version "0.19.2"
