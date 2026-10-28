@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import cn from 'classnames';
 import { Href, Link, Slot, usePathname } from 'expo-router';
 import type { ComponentProps } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import cn from "classnames"
 import { Header } from '@/src/components/header';
 import { useSession } from '@/src/contexts/auth-context';
 import { lightTheme } from '@/src/ui-kit';
