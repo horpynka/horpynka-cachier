@@ -2,7 +2,7 @@ import { Href, Link, Slot, usePathname } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import type { ComponentProps } from "react"
 
-import { FlatList, StyleSheet, View } from "react-native"
+import { FlatList, StyleSheet, Text, View } from "react-native"
 import cn from "classnames"
 import { Header } from "@/src/components/header"
 
@@ -21,6 +21,12 @@ const tabs: Tab[] = [
     chosenIcon: "home-sharp",
     route: "/",
     title: "Головна",
+  },
+  {
+    icon: "wallet-outline",
+    chosenIcon: "wallet",
+    route: "/cash",
+    title: "Каса",
   },
   {
     icon: "receipt-outline",
@@ -65,15 +71,24 @@ export default function TabLayout() {
           renderItem={({ item }) => (
             <Link href={item.route}>
               <View
-                className={cn("flex items-center justify-center h-[60px] w-[60px] rounded-2xl", {
-                  "bg-[#2563eb]": pathname === item.route,
+                className={cn("w-[72px] items-center justify-center gap-1 rounded-2xl py-2", {
+                  "bg-primary": pathname === item.route,
                 })}
               >
                 <Ionicons
                   name={pathname === item.route ? item.chosenIcon : item.icon}
                   color={pathname === item.route ? "#fff" : "rgba(255, 255, 255, 0.6)"}
-                  size={24}
+                  size={20}
                 />
+                <Text
+                  numberOfLines={1}
+                  className={cn(
+                    "text-[10px] font-semibold",
+                    pathname === item.route ? "text-primary-foreground" : "text-white/60",
+                  )}
+                >
+                  {item.title}
+                </Text>
               </View>
             </Link>
           )}
