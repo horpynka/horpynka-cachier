@@ -1,28 +1,34 @@
 import { DATE_FORMATS, dateFns } from '@/src/utils/date-fns';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
-import { Ionicons } from '@expo/vector-icons';
+import { StatusChip } from './components/status-chip';
 
-export const Header = () => {
-  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+type Props = {
+  title?: string;
+};
+
+const DATE_TICK_MS = 30000;
+
+export const Header = ({ title = 'POS Касир' }: Props) => {
+  const [now, setNow] = useState(() => dateFns.now());
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsConnected(state.isInternetReachable);
-    });
-
-    return () => unsubscribe();
+    const id = setInterval(() => setNow(dateFns.now()), DATE_TICK_MS);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <View className="h-14 shrink-0 bg-card border-b border-border px-5 flex flex-row items-center justify-between gap-4">
-      <Text className="text-m text-muted-foreground">{dateFns.format(dateFns.today(), DATE_FORMATS.withWeekday)}</Text>
-      <View>
-        <View className="flex flex-row items-center gap-1.5 rounded-full bg-card border border-border px-2.5 py-1">
-          <Ionicons size={14} name='wifi-sharp' color={isConnected ? 'green' : 'red'} />
-          <Text className="text-m font-semibold uppercase tracking-wider text-muted-foreground">{isConnected ? 'Онлайн' : 'Офлайн'}</Text>
-        </View>
+    <View className="h-14 w-full shrink-0 flex-row items-center justify-between gap-4 border-b border-border bg-card px-5">
+      <View className="min-w-0 flex-1 flex-row items-baseline gap-3">
+        <Text className="shrink text-base font-bold text-foreground" numberOfLines={1}>
+          {title}
+        </Text>
+        <Text className="shrink-0 text-xs text-muted-foreground">
+          {dateFns.format(now, DATE_FORMATS.withWeekday)}
+        </Text>
+      </View>
+      <View className="shrink-0 flex-row items-center gap-3">
+        <StatusChip />
       </View>
     </View>
   );
