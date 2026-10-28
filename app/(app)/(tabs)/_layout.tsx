@@ -1,102 +1,98 @@
-import { Href, Link, Slot, usePathname } from "expo-router"
-import { Ionicons } from "@expo/vector-icons"
-import type { ComponentProps } from "react"
+import { Ionicons } from '@expo/vector-icons';
+import { Href, Link, Slot, usePathname } from 'expo-router';
+import type { ComponentProps } from 'react';
+import { Pressable, Text, View } from 'react-native';
 
-import { FlatList, StyleSheet, Text, View } from "react-native"
 import cn from "classnames"
-import { Header } from "@/src/components/header"
+import { Header } from '@/src/components/header';
+import { useSession } from '@/src/contexts/auth-context';
+import { lightTheme } from '@/src/ui-kit';
 
-type IoniconName = ComponentProps<typeof Ionicons>["name"]
+type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
-type Tab = {
-  icon: IoniconName
-  chosenIcon: IoniconName
-  route: Href
-  title: string
-}
+type RailItem = {
+  icon: IoniconName;
+  route: string;
+  title: string;
+  exact: boolean;
+};
 
-const tabs: Tab[] = [
-  {
-    icon: "home-outline",
-    chosenIcon: "home-sharp",
-    route: "/",
-    title: "Головна",
-  },
-  {
-    icon: "receipt-outline",
-    chosenIcon: "receipt",
-    route: "/receipts",
-    title: "Чеки",
-  },
-  {
-    icon: "restaurant-outline",
-    chosenIcon: "restaurant",
-    route: "/kitchen",
-    title: "Кухня",
-  },
-  {
-    icon: "menu-outline",
-    chosenIcon: "menu",
-    route: "/menu",
-    title: "Menu",
-  },
-  {
-    icon: "clipboard-outline",
-    chosenIcon: "clipboard",
-    route: "/inventory",
-    title: "Облік",
-  },
-  ...(process.env.EXPO_PUBLIC_DEVELOPMENT === "true"
+const tabs: RailItem[] = [
+  { icon: 'home', route: '/', title: 'Головна', exact: true },
+  { icon: 'archive', route: '/archive', title: 'Архів', exact: false },
+  { icon: 'wallet', route: '/cash', title: 'Каса', exact: false },
+  { icon: 'restaurant', route: '/bistro', title: 'Бістро', exact: false },
+  { icon: 'clipboard', route: '/inventory', title: 'Облік', exact: false },
+  ...(process.env.EXPO_PUBLIC_DEVELOPMENT === 'true'
     ? ([
         {
-          icon: "cog-outline",
-          chosenIcon: "cog",
-          route: "/storybook",
-          title: "Storybook",
+          icon: 'cog',
+          route: '/storybook',
+          title: 'Storybook',
+          exact: true,
         },
-      ] satisfies Tab[])
+      ] satisfies RailItem[])
     : []),
-]
+];
+
+const isRailItemActive = (pathname: string, item: RailItem) => {
+  if (item.exact) {
+    return pathname === item.route;
+  }
+
+  return pathname.startsWith(item.route);
+};
 
 export default function TabLayout() {
-  const pathname = usePathname()
+  const pathname = usePathname();
+  const { signOut } = useSession();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.verticalTabs} className="bg-[#0f172a]">
-        <FlatList
-          scrollEnabled={false}
-          data={tabs}
-          contentContainerClassName="w-full flex items-center justify-center"
-          renderItem={({ item }) => {
-            const active =
-              item.route === "/"
-                ? pathname === item.route
-                : pathname === item.route || pathname.startsWith(`${item.route}/`)
+    <View className="flex-1 flex-row">
+      <View className="h-full w-[88px] shrink-0 flex-col items-center gap-1 bg-slate-900 py-3">
+        <View className="w-full flex-1 flex-col items-center gap-1 px-2">
+          {tabs.map((item) => {
+            const active = isRailItemActive(pathname, item);
 
             return (
-              <Link href={item.route}>
-                <View
-                  className={cn("flex w-full items-center justify-center min-h-[60px] rounded-2xl py-2", {
-                    "bg-primary": active,
-                  })}
+              <Link key={item.route} href={item.route as Href} asChild>
+                <Pressable
+                  className={cn(
+                    'w-full flex-col items-center gap-1 rounded-2xl py-3',
+                    active ? 'bg-primary' : 'active:bg-white/10',
+                  )}
                 >
                   <Ionicons
-                    name={active ? item.chosenIcon : item.icon}
-                    color={active ? "#fff" : "rgba(255, 255, 255, 0.6)"}
-                    size={24}
+                    name={item.icon}
+                    size={20}
+                    color={
+                      active
+                        ? lightTheme.colors.primaryForeground
+                        : 'rgba(255, 255, 255, 0.6)'
+                    }
                   />
                   <Text
-                    numberOfLines={1}
-                    className={cn("text-[10px] font-semibold", active ? "text-white" : "text-white/60")}
+                    className={cn(
+                      'text-[10px] font-semibold',
+                      active ? 'text-primary-foreground' : 'text-white/60',
+                    )}
                   >
                     {item.title}
                   </Text>
-                </View>
+                </Pressable>
               </Link>
-            )
-          }}
-        />
+            );
+          })}
+        </View>
+        <View className="w-full px-2">
+          <Pressable
+            onPress={signOut}
+            className="w-full flex-col items-center gap-1 rounded-2xl py-3 active:bg-white/10"
+          >
+            <Ionicons name="log-out" size={20} color="rgba(255, 255, 255, 0.5)" />
+            <Text className="text-[10px] font-semibold text-white/50">Вийти</Text>
+          </Pressable>
+        </View>
       </View>
       <View className="flex-1 flex flex-col bg-background text-foreground">
         <Header />
@@ -105,22 +101,5 @@ export default function TabLayout() {
         </View>
       </View>
     </View>
-  )
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: "row",
-  },
-  verticalTabs: {
-    height: "100%",
-    width: 88,
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingHorizontal: 8,
-  },
-  pageContainer: {
-    flex: 1,
-  },
-})

@@ -64,7 +64,7 @@ export const ReceiptSidebar = (props: Props) => {
         setIsOpen={setIsDeleteModalOpen}
       >
         <View>
-          <Text>Чернетку буде видалено назавжди. Цю дію не можна скасувати.</Text>
+          <Text>Чек буде видалено.</Text>
         </View>
       </Modal>
     </View>
