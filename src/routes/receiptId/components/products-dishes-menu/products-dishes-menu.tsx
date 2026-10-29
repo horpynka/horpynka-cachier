@@ -13,7 +13,6 @@ type Props = {
   onQueryChange: (value: string) => void;
   onCategoryChange: (id: number | 'all') => void;
   onModeChange: (mode: CatalogMode) => void;
-  onAddItem: (item: MenuItemDto) => void;
 };
 
 export const ProductsDishesMenu = ({
@@ -25,7 +24,6 @@ export const ProductsDishesMenu = ({
   onQueryChange,
   onCategoryChange,
   onModeChange,
-  onAddItem,
 }: Props) => {
   return (
     <View className="min-h-0 min-w-0 flex-1 gap-3">
@@ -38,7 +36,7 @@ export const ProductsDishesMenu = ({
         onCategoryChange={onCategoryChange}
         onModeChange={onModeChange}
       />
-      <MenuList items={items} onAddItem={onAddItem} />
+      <MenuList items={items} />
     </View>
   );
 };

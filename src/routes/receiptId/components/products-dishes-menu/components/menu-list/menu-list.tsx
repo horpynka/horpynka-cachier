@@ -8,7 +8,7 @@ const columns = 4;
 
 type Props = {
   items: MenuItemDto[];
-  onAddItem: (item: MenuItemDto) => void;
+  onAddItem?: (item: MenuItemDto) => void;
 };
 
 export const MenuList = ({ items, onAddItem }: Props) => {
@@ -33,7 +33,7 @@ export const MenuList = ({ items, onAddItem }: Props) => {
         <Text className="py-12 text-center text-sm text-muted-foreground">Нічого не знайдено</Text>
       }
       renderItem={({ item }) =>
-        item ? <MenuItemCard item={item} onPress={() => onAddItem(item)} /> : <View className="flex-1" />
+        item ? <MenuItemCard item={item} onPress={() => onAddItem?.(item)} /> : <View className="flex-1" />
       }
     />
   );

@@ -7,8 +7,8 @@ import { moneyService } from '@/src/utils/money-service';
 
 type Props = {
   data: OrderItemModel;
-  onRemove: () => void;
-  onChangeQuantity: (quantity: number) => void;
+  onRemove?: () => void;
+  onChangeQuantity?: (quantity: number) => void;
 };
 
 export const OrderItem = ({ data, onRemove, onChangeQuantity }: Props) => {
@@ -26,7 +26,7 @@ export const OrderItem = ({ data, onRemove, onChangeQuantity }: Props) => {
       <View className="flex-row items-center justify-between gap-2">
         <View className="flex-row items-center gap-1.5">
           <Pressable
-            onPress={() => onChangeQuantity(quantity - 1)}
+            onPress={() => onChangeQuantity?.(quantity - 1)}
             className="h-8 w-8 items-center justify-center rounded-xl border border-border bg-card active:bg-muted"
           >
             <Ionicons name="remove" size={14} color={lightTheme.colors.foreground} />
@@ -34,11 +34,11 @@ export const OrderItem = ({ data, onRemove, onChangeQuantity }: Props) => {
           <TextInput
             value={String(quantity)}
             keyboardType="number-pad"
-            onChangeText={(value) => onChangeQuantity(Number(value) || 0)}
+            onChangeText={(value) => onChangeQuantity?.(Number(value) || 0)}
             className="h-8 w-12 rounded-xl border border-border bg-card text-center text-sm font-semibold text-foreground"
           />
           <Pressable
-            onPress={() => onChangeQuantity(quantity + 1)}
+            onPress={() => onChangeQuantity?.(quantity + 1)}
             className="h-8 w-8 items-center justify-center rounded-xl border border-border bg-card active:bg-muted"
           >
             <Ionicons name="add" size={14} color={lightTheme.colors.foreground} />

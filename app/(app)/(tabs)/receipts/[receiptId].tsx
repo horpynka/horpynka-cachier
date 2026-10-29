@@ -1,7 +1,5 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -17,21 +15,12 @@ import { PaymentSheet } from '@/src/routes/receiptId/components/payment-sheet';
 import { ProductsDishesMenu } from '@/src/routes/receiptId/components/products-dishes-menu';
 import { ReceiptNotFound } from '@/src/routes/receiptId/components/receipt-not-found';
 import { ReceiptSidebar } from '@/src/routes/receiptId/components/receipt-sidebar';
-import { useStore } from '@/src/store';
 
 type CatalogMode = 'products' | 'bistro';
 
-const parseReceiptId = (value: string | string[] | undefined) => {
-  const raw = Array.isArray(value) ? value[0] : value;
-  const id = Number(raw);
-  return Number.isInteger(id) && id > 0 ? id : null;
-};
-
 export default function ReceiptDetails() {
   const { receiptId } = useLocalSearchParams<{ receiptId: string }>();
-  const orderId = parseReceiptId(receiptId);
-  const storedReceipt = useStore((state) => state.receipt);
-  const initialOrder = storedReceipt && storedReceipt.id === orderId ? storedReceipt : undefined;
+  const orderId = Number(receiptId);
 
   const [mode, setMode] = useState<CatalogMode>('products');
   const [categoryId, setCategoryId] = useState<number | 'all'>('all');
@@ -42,12 +31,11 @@ export default function ReceiptDetails() {
   const { getCategoriesQuery } = useCategoriesApi();
   const { getOrderQuery } = useOrdersApi();
 
+  // TODO: for now this returns all items as one array, we need two fields: products and dishes
   const { data: menu = [] } = useQuery<MenuItemDto[]>(getMenuQuery());
   const { data: categories } = useQuery<FindAllCategoriesResponseDto>(getCategoriesQuery());
   const { data: order, isPending } = useQuery<Order>({
-    ...getOrderQuery(orderId ?? 0),
-    enabled: orderId !== null,
-    initialData: initialOrder,
+    ...getOrderQuery(orderId),
   });
 
   const categoryChips = (mode === 'bistro' ? categories?.dishesCategories : categories?.productsCategories) ?? [];
@@ -85,28 +73,26 @@ export default function ReceiptDetails() {
   }
 
   return (
-    <GestureHandlerRootView className="h-full flex-1">
-      <BottomSheetModalProvider>
-        <View className="h-full min-h-0 flex-1 flex-row gap-4">
-          <ProductsDishesMenu
-            mode={mode}
-            query={query}
-            categoryId={categoryId}
-            chips={chips}
-            items={items}
-            onQueryChange={setQuery}
-            onCategoryChange={setCategoryId}
-            onModeChange={switchMode}
-            onAddItem={() => undefined}
-          />
-          <ReceiptSidebar order={order} onPay={() => setIsPaymentOpen(true)} />
-        </View>
-        <PaymentSheet
-          total={order.orderPrice}
-          isOpen={isPaymentOpen}
-          onClose={() => setIsPaymentOpen(false)}
+    <>
+      <View className="h-full min-h-0 flex-1 flex-row gap-4">
+        {/* TODO: we should have logic for adding/removing items to the order and syncing local data with db data */}
+        <ProductsDishesMenu
+          mode={mode}
+          query={query}
+          categoryId={categoryId}
+          chips={chips}
+          items={items}
+          onQueryChange={setQuery}
+          onCategoryChange={setCategoryId}
+          onModeChange={switchMode}
         />
-      </BottomSheetModalProvider>
-    </GestureHandlerRootView>
+        <ReceiptSidebar order={order} onPay={() => setIsPaymentOpen(true)} />
+      </View>
+      <PaymentSheet
+        total={order.orderPrice}
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+      />
+    </>
   );
 }

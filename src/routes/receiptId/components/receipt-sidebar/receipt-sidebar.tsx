@@ -57,8 +57,6 @@ export const ReceiptSidebar = ({ order, onPay }: Props) => {
           renderItem={({ item }) => (
             <OrderItem
               data={item}
-              onRemove={() => undefined}
-              onChangeQuantity={() => undefined}
             />
           )}
         />
