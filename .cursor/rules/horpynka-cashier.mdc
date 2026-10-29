@@ -25,6 +25,22 @@ A component folder is `kebab-case` and holds `<name>.tsx` plus `index.ts`:
 export { ActiveReceiptList } from './active-receipt-list';
 ```
 
+One file exports one component.
+
+A function that is not a component goes in `helpers.ts` beside the component. Add that file only when the component needs it. `initials` belongs in `src/components/header/helpers.ts`.
+
+A subcomponent lives in a `components/` folder inside the parent folder, as its own component folder. `StatusChip` lives at `src/components/header/components/status-chip/`.
+
+```
+src/components/header/
+  header.tsx
+  helpers.ts
+  types.ts
+  index.ts
+  components/
+    status-chip.tsx
+```
+
 ## Routing
 
 Tab screens live in `app/(app)/(tabs)/`. That layout already renders the rail, `Header`, and page padding. Auth gates stay in `app/_layout.tsx` via `Stack.Protected`. Read the session with `useSession()`.
