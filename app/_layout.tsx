@@ -7,19 +7,26 @@ import "@/src/styles/global.css"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 import { initializersStart } from "@/src/initializers"
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 export default function Root() {
   const [queryClient] = useState(() => new QueryClient())
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <QueryClientProvider client={queryClient}>
-        <SessionProvider>
-          <SplashScreenController />
-          <RootNavigator />
-        </SessionProvider>
-      </QueryClientProvider>
-    </SafeAreaView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <SafeAreaView style={{ flex: 1 }}>
+          <QueryClientProvider client={queryClient}>
+            <SessionProvider>
+              <SplashScreenController />
+              <RootNavigator />
+            </SessionProvider>
+          </QueryClientProvider>
+        </SafeAreaView>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   )
 }
 
