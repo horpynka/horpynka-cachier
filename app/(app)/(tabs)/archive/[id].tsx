@@ -1,32 +1,32 @@
-import { type Order, useOrdersApi } from '@horpynka/api-sdk';
-import { useQuery } from '@tanstack/react-query';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { Pressable, Text, View } from 'react-native';
-
-import { ArchiveReceiptDetail } from '@/src/routes/archive/components/archive-receipt-detail';
+import { ArchiveReceipt } from "@/src/routes/archive/components/archive-receipt"
+import { useOrdersApi, type Order } from "@horpynka/api-sdk"
+import { useQuery } from "@tanstack/react-query"
+import { Link, useLocalSearchParams } from "expo-router"
+import { Text, View } from "react-native"
 
 export default function ArchiveReceiptScreen() {
-  const { id } = useLocalSearchParams();
-  const router = useRouter();
-  const { getOrderQuery } = useOrdersApi();
-  const { data: order, isLoading } = useQuery<Order>({
-    ...getOrderQuery(Number(id)),
-  });
-
-  if (order) {
-    return <ArchiveReceiptDetail order={order} />;
-  }
+  const { id: rawId } = useLocalSearchParams<{ id: string | string[] }>()
+  const { getOrderQuery } = useOrdersApi()
+  const {
+    data: order,
+    isLoading,
+    isError,
+  } = useQuery<Order>(getOrderQuery(Number(rawId)))
 
   if (isLoading) {
-    return <View className="flex-1" />;
+    return <View className="flex-1" />
   }
 
-  return (
-    <View className="items-center gap-2 py-12">
-      <Text className="text-center text-muted-foreground">Чек не знайдено.</Text>
-      <Pressable onPress={() => router.push('/archive')}>
-        <Text className="text-primary underline">До архіву</Text>
-      </Pressable>
-    </View>
-  );
+  if (isError || !order) {
+    return (
+      <View className="flex-1 flex-row flex-wrap items-center justify-center">
+        <Text className="text-center text-muted-foreground">Чек не знайдено. </Text>
+        <Link href='/archive'>
+          <Text className="text-primary underline">До архіву</Text>
+        </Link>
+      </View>
+    )
+  }
+
+  return <ArchiveReceipt order={order} />
 }

@@ -18,7 +18,7 @@ export const QuickLinks = () => {
     <View className="flex-row flex-wrap justify-between gap-y-2">
       {links.map((link) => (
         <Link key={link.label} href={link.href} asChild>
-          <Pressable className="h-16 w-[48%] flex-row items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 active:bg-muted">
+          <Pressable className="h-16 w-[48%] flex-row items-center gap-2 rounded-md border border-border bg-card px-4 py-3 active:bg-muted">
             <Ionicons name={link.icon} size={20} color={lightTheme.colors.primary} />
             <Text className="text-sm font-semibold text-foreground">{link.label}</Text>
           </Pressable>
