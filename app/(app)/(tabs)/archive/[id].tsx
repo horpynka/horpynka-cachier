@@ -5,21 +5,12 @@ import { Pressable, Text, View } from 'react-native';
 
 import { ArchiveReceiptDetail } from '@/src/routes/archive/components/archive-receipt-detail';
 
-const orderIdFromParam = (id: string | string[] | undefined) => {
-  const raw = Array.isArray(id) ? id[0] : id;
-  const orderId = Number(raw);
-
-  return Number.isInteger(orderId) && orderId > 0 ? orderId : null;
-};
-
 export default function ArchiveReceiptScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id } = useLocalSearchParams();
   const router = useRouter();
-  const orderId = orderIdFromParam(id);
   const { getOrderQuery } = useOrdersApi();
   const { data: order, isLoading } = useQuery<Order>({
-    ...getOrderQuery(orderId ?? 0),
-    enabled: orderId !== null,
+    ...getOrderQuery(Number(id)),
   });
 
   if (order) {

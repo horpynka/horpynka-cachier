@@ -24,7 +24,7 @@ export const ArchiveSort = ({ value, onChange }: Props) => {
   const selected = sorts.find((sort) => sort.id === value) ?? sorts[0];
 
   return (
-    <View>
+    <View className="w-56 self-start">
       <Pressable
         onPress={() => setOpen((current) => !current)}
         className="h-11 w-full flex-row items-center rounded-2xl border border-border bg-card px-4"

@@ -1,7 +1,7 @@
 ---
 description: Cashier app structure, component style, NativeWind, and API usage
 globs: "**/*.{js,jsx,ts,tsx}"
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Cashier

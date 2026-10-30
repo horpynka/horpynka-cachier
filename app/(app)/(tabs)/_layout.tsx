@@ -43,14 +43,6 @@ const isRailItemActive = (pathname: string, item: RailItem) => {
   return pathname.startsWith(item.route);
 };
 
-const isTabActive = (pathname: string, route: Href) => {
-  if (route === "/archive") {
-    return pathname === "/archive" || pathname.startsWith("/archive/")
-  }
-
-  return pathname === route
-}
-
 export default function TabLayout() {
   const pathname = usePathname();
   const { signOut } = useSession();

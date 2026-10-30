@@ -1,2 +1,3 @@
-export { ArchivePeriodFilter, archivePeriodRange } from './archive-period-filter';
-export type { ArchivePeriod } from './archive-period-filter';
+export { ArchivePeriodFilter } from './archive-period-filter';
+export { archivePeriodFromRange, archivePeriodRange } from './helpers';
+export type { ArchivePeriod } from './types';
