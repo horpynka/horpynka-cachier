@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { moneyService } from '@/src/utils/money-service';
+
 class YupService {
   requiredString(message = 'Обовʼязкове поле.') {
     return yup.string().trim().required(message);
@@ -17,6 +19,14 @@ class YupService {
       .required('Введіть пароль.')
       .min(8, `Пароль повинен містити щонайменше 8 символів.`)
       .max(255, 'Пароль завдовгий.');
+  }
+
+  money(message = 'Вкажіть суму.') {
+    return this.requiredString(message).test(
+      'kopecks',
+      'Вкажіть коректну суму.',
+      (value) => typeof value === 'string' && moneyService.toCents(value) !== null,
+    );
   }
 }
 

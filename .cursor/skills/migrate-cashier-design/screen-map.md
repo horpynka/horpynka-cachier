@@ -11,7 +11,6 @@ Re-read the hook file before calling it. Method names move. The package import i
 | Archive | `routes/archive.tsx` | `app/(app)/(tabs)/archive/index.tsx`, `src/routes/archive` | `ordersApi.ts` `getOrdersQuery` filters (`status`, `search`, `from`, `to`). |
 | Archive detail | `routes/archive.$id.tsx` | `app/(app)/(tabs)/archive/[id].tsx`, `src/routes/archive` | `ordersApi.ts` `getOrderQuery`. Return and cancel only if that hook exposes them. |
 | Cash | `routes/cash.tsx` | `app/(app)/(tabs)/cash/index.tsx`, `src/routes/cash` | `cashShiftsApi.ts`. Cash in/out only if the spec has the operation. |
-| Bistro | `routes/bistro.tsx` | `app/(app)/(tabs)/bistro/index.tsx`, `src/routes/bistro` | `dashboardApi.ts`, plus `dishesApi.ts` if the stats DTO is not enough. Do not aggregate `pos-store`. |
 | Inventory list | `routes/inventory.tsx` | `app/(app)/(tabs)/inventory/index.tsx`, `src/routes/inventory` | `inventoryApi.ts` |
 | Inventory count | `routes/inventory.$id.tsx` | `app/(app)/(tabs)/inventory/[id].tsx`, `src/routes/inventory` | `inventoryApi.ts` |
 | Rail | `components/layout/SideRail.tsx` | `app/(app)/(tabs)/_layout.tsx` | Logout: `useSession().signOut()` |
