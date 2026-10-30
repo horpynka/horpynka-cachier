@@ -15,7 +15,7 @@ export type ModalAction = {
 type Props = PropsWithChildren<{
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  title?: string
+  title?: string | ReactNode
   showCloseButton?: boolean
   closeOnOverlayClick?: boolean
   actions?: ModalAction[]
@@ -49,7 +49,7 @@ export const Modal = ({
           <View className="px-5 pt-5 pb-4">
             <View className="flex flex-row items-center justify-between gap-3">
               <View>
-                {title && <Text className="text-lg font-bold leading-tight text-card-foreground">{title}</Text>}
+                {typeof title === 'string' ? <Text className="text-lg font-bold leading-tight text-card-foreground">{title}</Text> : title}
               </View>
 
               {showCloseButton && (

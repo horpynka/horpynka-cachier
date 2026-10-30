@@ -1,15 +1,42 @@
-import React from 'react'
-import { View } from 'react-native'
-import { MenuControls } from './components/menu-controls'
-import { MenuList } from './components/menu-list'
+import { View } from 'react-native';
+import type { MenuItemDto } from '@horpynka/api-sdk';
 
-type Props = {}
+import { MenuControls, type CatalogChip, type CatalogMode } from './components/menu-controls';
+import { MenuList } from './components/menu-list';
 
-export const ProductsDishesMenu = (props: Props) => {
+type Props = {
+  mode: CatalogMode;
+  query: string;
+  categoryId: number | 'all';
+  chips: CatalogChip[];
+  items: MenuItemDto[];
+  onQueryChange: (value: string) => void;
+  onCategoryChange: (id: number | 'all') => void;
+  onModeChange: (mode: CatalogMode) => void;
+};
+
+export const ProductsDishesMenu = ({
+  mode,
+  query,
+  categoryId,
+  chips,
+  items,
+  onQueryChange,
+  onCategoryChange,
+  onModeChange,
+}: Props) => {
   return (
-    <View className='flex flex-col gap-4 max-w-[60%] w-full pb-28'>
-      <MenuControls />
-      <MenuList />
+    <View className="min-h-0 min-w-0 flex-1 gap-3">
+      <MenuControls
+        mode={mode}
+        query={query}
+        categoryId={categoryId}
+        chips={chips}
+        onQueryChange={onQueryChange}
+        onCategoryChange={onCategoryChange}
+        onModeChange={onModeChange}
+      />
+      <MenuList items={items} />
     </View>
-  )
-}
+  );
+};
