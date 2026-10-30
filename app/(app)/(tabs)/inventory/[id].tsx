@@ -7,18 +7,14 @@ import { InventoryCount } from '@/src/routes/inventory/components/inventory-coun
 import { InventoryNotFound } from '@/src/routes/inventory/components/inventory-not-found';
 
 export default function InventoryCountScreen() {
-  const { id: rawId } = useLocalSearchParams<{ id: string }>();
-  const idText = Array.isArray(rawId) ? rawId[0] : rawId;
-  const parsedId = Number(idText);
-  const idIsValid = Number.isInteger(parsedId) && parsedId > 0;
+  const { id } = useLocalSearchParams<{ id: string }>();
   const { getInventoryQuery } = useInventoryApi();
   const inventoryQuery = useQuery<InventoryDto>({
-    ...getInventoryQuery(idIsValid ? parsedId : 0),
-    enabled: idIsValid,
+    ...getInventoryQuery(Number(id)),
     retry: false,
   });
 
-  if (!idIsValid || (inventoryQuery.isError && !inventoryQuery.data)) {
+  if ((inventoryQuery.isError && !inventoryQuery.data)) {
     return <InventoryNotFound />;
   }
 

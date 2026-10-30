@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { moneyService } from '@/src/utils/money-service';
+
 class YupService {
   requiredString(message = 'Обовʼязкове поле.') {
     return yup.string().trim().required(message);
@@ -37,7 +39,15 @@ class YupService {
         }
 
         return Number.isSafeInteger(Number(trimmed));
-      });
+      })
+  }
+
+  money(message = 'Вкажіть суму.') {
+    return this.requiredString(message).test(
+      'kopecks',
+      'Вкажіть коректну суму.',
+      (value) => typeof value === 'string' && moneyService.toCents(value) !== null,
+    );
   }
 }
 

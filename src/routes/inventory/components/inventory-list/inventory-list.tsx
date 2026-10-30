@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import type { InventoryDto } from '@horpynka/api-sdk';
+import { InventoryDto, useInventoryApi } from '@horpynka/api-sdk';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { lightTheme } from '@/src/ui-kit';

@@ -1,7 +1,7 @@
 ---
 description: Cashier app structure, component style, NativeWind, and API usage
 globs: "**/*.{js,jsx,ts,tsx}"
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Cashier
@@ -25,6 +25,24 @@ A component folder is `kebab-case` and holds `<name>.tsx` plus `index.ts`:
 export { ActiveReceiptList } from './active-receipt-list';
 ```
 
+One file exports one component.
+
+A function that is not a component goes in `helpers.ts` beside the component. Add that file only when the component needs it. `initials` belongs in `src/components/header/helpers.ts`.
+
+Name that function for the action it performs: `getStatusLabel`, `getPaymentLabel`, `getItemName`. A bare noun (`statusLabel`, `paymentLabel`, `itemName`) does not say what it does.
+
+A subcomponent lives in a `components/` folder inside the parent folder, as its own component folder. `StatusChip` lives at `src/components/header/components/status-chip/`.
+
+```
+src/components/header/
+  header.tsx
+  helpers.ts
+  types.ts
+  index.ts
+  components/
+    status-chip.tsx
+```
+
 ## Routing
 
 Tab screens live in `app/(app)/(tabs)/`. That layout already renders the rail, `Header`, and page padding. Auth gates stay in `app/_layout.tsx` via `Stack.Protected`. Read the session with `useSession()`.
@@ -39,7 +57,18 @@ Leave `ios/`, `android/`, and `.expo/` alone.
 
 ESLint is the style source: single quotes and semicolons. Older files that skip semicolons or use double quotes are drift. New code follows ESLint.
 
-- Functions are `PascalCase`. Files and folders are `kebab-case`.
+- Every function is an arrow function. Do not write `function` declarations or `function` expressions. This includes components, hooks, helpers, and callbacks. Class methods on the `src/utils` service singletons stay methods.
+- A route file still default-exports. Bind the arrow to a named const, then `export const` that name, not `export default`.
+
+```tsx
+const ArchiveReceiptScreen = () => {
+  return <ArchiveReceipt order={order} />;
+};
+
+export default ArchiveReceiptScreen;
+```
+
+- Components are `PascalCase`. Other functions are `camelCase` and start with a verb that says what they do (`getStatusLabel`, `toPickerDate`). Files and folders are `kebab-case`.
 - Local props type is `Props`. Export a props type from ui-kit (`ButtonProps`) when callers need it.
 - Cross-module imports use `@/src/...`. Imports inside one feature are relative.
 - Import a primitive from its folder barrel: `@/src/ui-kit/components/button`.

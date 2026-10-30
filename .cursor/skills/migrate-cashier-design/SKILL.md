@@ -42,7 +42,7 @@ Port the screen the user named. If they did not name one, list the rows in [scre
 
 Change the rail or header only when the user asked for the shell, or the screen you are adding has no rail item yet. Add that item to match `SideRail.tsx` (88px, `bg-slate-900`, icon plus Ukrainian label, active `bg-primary`). Keep the Storybook item behind `EXPO_PUBLIC_DEVELOPMENT`. Logout calls `useSession().signOut()`.
 
-Target destinations, in rail order: Головна `/`, Архів `/archive`, Каса `/cash`, Бістро `/bistro`, Облік `/inventory`, Вийти. Home is open drafts, not a second «Чеки» tab.
+Target destinations, in rail order: Головна `/`, Архів `/archive`, Каса `/cash`, Облік `/inventory`, Вийти. Home is open drafts, not a second «Чеки» tab.
 
 ## Layout patterns that matter
 

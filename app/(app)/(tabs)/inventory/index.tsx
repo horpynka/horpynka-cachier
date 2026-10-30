@@ -1,6 +1,6 @@
 import { useInventoryApi, type InventoryDto } from '@horpynka/api-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 
 import { InventoryList } from '@/src/routes/inventory/components/inventory-list';
 
@@ -20,7 +20,7 @@ export default function InventoryScreen() {
           {},
           {
             onSuccess: (response) => {
-              router.push(`/inventory/${response.data.id}`);
+              router.push(`/inventory/${response.data.id}` as unknown as Href);
             },
           },
         );
