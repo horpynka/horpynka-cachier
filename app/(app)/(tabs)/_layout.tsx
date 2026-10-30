@@ -104,7 +104,7 @@ export default function TabLayout() {
       </View>
       <View className="flex-1 flex flex-col bg-background text-foreground">
         <Header />
-        <View className="h-full p-5">
+        <View className="min-h-0 flex-1 p-5">
           <Slot />
         </View>
       </View>
