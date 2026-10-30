@@ -21,7 +21,6 @@ const tabs: RailItem[] = [
   { icon: 'home', route: '/', title: 'Головна', exact: true },
   { icon: 'archive', route: '/archive', title: 'Архів', exact: false },
   { icon: 'wallet', route: '/cash', title: 'Каса', exact: false },
-  { icon: 'restaurant', route: '/bistro', title: 'Бістро', exact: false },
   { icon: 'clipboard', route: '/inventory', title: 'Облік', exact: false },
   ...(process.env.EXPO_PUBLIC_DEVELOPMENT === 'true'
     ? ([

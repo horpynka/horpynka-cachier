@@ -9,7 +9,6 @@ type IoniconName = ComponentProps<typeof Ionicons>['name'];
 const links: { href: Href; icon: IoniconName; label: string }[] = [
   { href: '/cash' as unknown as Href, icon: 'wallet', label: 'Каса' },
   { href: '/archive' as unknown as Href, icon: 'archive', label: 'Архів' },
-  { href: '/bistro' as unknown as Href, icon: 'restaurant', label: 'Бістро' },
   { href: '/inventory' as unknown as Href, icon: 'clipboard', label: 'Облік' },
 ];
 
