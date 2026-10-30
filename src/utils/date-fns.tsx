@@ -47,6 +47,7 @@ export const DATE_FORMATS = {
   withWeekday: 'EEEE, d MMMM',
   time: 'HH:mm',
   datetime: 'dd.MM.yyyy HH:mm',
+  isoDate: 'yyyy-MM-dd',
   monthYear: 'LLLL yyyy',
   dayAndMonth: 'd MMMM',
 } as const;
