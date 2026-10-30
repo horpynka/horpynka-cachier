@@ -1,27 +1,32 @@
-import { ArchiveReceipt } from '@/src/routes/archive/components/archive-receipt';
-import { ArchiveReceiptMissing } from '@/src/routes/archive/components/archive-receipt-missing';
-import { useOrdersApi, type Order } from '@horpynka/api-sdk';
-import { useQuery } from '@tanstack/react-query';
-import { useLocalSearchParams } from 'expo-router';
-import { View } from 'react-native';
+import { ArchiveReceipt } from "@/src/routes/archive/components/archive-receipt"
+import { useOrdersApi, type Order } from "@horpynka/api-sdk"
+import { useQuery } from "@tanstack/react-query"
+import { Link, useLocalSearchParams } from "expo-router"
+import { Text, View } from "react-native"
 
 export default function ArchiveReceiptScreen() {
-  const { id: rawId } = useLocalSearchParams<{ id: string | string[] }>();
-  const id = Number(Array.isArray(rawId) ? rawId[0] : rawId);
-  const isValidId = Number.isInteger(id) && id > 0;
-  const { getOrderQuery } = useOrdersApi();
-  const { data: order, isLoading, isError } = useQuery<Order>({
-    ...getOrderQuery(id),
-    enabled: isValidId,
-  });
+  const { id: rawId } = useLocalSearchParams<{ id: string | string[] }>()
+  const { getOrderQuery } = useOrdersApi()
+  const {
+    data: order,
+    isLoading,
+    isError,
+  } = useQuery<Order>(getOrderQuery(Number(rawId)))
 
-  if (isValidId && isLoading) {
-    return <View className="flex-1" />;
+  if (isLoading) {
+    return <View className="flex-1" />
   }
 
-  if (!isValidId || isError || !order) {
-    return <ArchiveReceiptMissing />;
+  if (isError || !order) {
+    return (
+      <View className="flex-1 flex-row flex-wrap items-center justify-center">
+        <Text className="text-center text-muted-foreground">Чек не знайдено. </Text>
+        <Link href='/archive'>
+          <Text className="text-primary underline">До архіву</Text>
+        </Link>
+      </View>
+    )
   }
 
-  return <ArchiveReceipt order={order} />;
+  return <ArchiveReceipt order={order} />
 }
