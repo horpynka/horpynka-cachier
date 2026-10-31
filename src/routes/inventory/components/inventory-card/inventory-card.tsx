@@ -1,10 +1,11 @@
-import { InventoryDto } from '@horpynka/api-sdk';
+import type { InventoryDto } from '@horpynka/api-sdk';
 import cn from 'classnames';
 import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 import { DATE_FORMATS, dateFns } from '@/src/utils/date-fns';
-import { getStatusClassName, getStatusLabel } from './helpers';
+
+import { inventoryStatusLabel, isInventoryReadOnly } from '../../inventory-status';
 
 type Props = {
   inventory: InventoryDto;
@@ -12,6 +13,7 @@ type Props = {
 
 export const InventoryCard = ({ inventory }: Props) => {
   const router = useRouter();
+  const completed = isInventoryReadOnly(inventory.status);
 
   return (
     <Pressable
@@ -30,10 +32,10 @@ export const InventoryCard = ({ inventory }: Props) => {
         <Text
           className={cn(
             'rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide',
-            getStatusClassName(inventory.status),
+            completed ? 'bg-success/15 text-success' : 'bg-muted text-muted-foreground',
           )}
         >
-          {getStatusLabel(inventory.status)}
+          {inventoryStatusLabel(inventory.status)}
         </Text>
       </View>
     </Pressable>

@@ -21,6 +21,27 @@ class YupService {
       .max(255, 'Пароль завдовгий.');
   }
 
+  optionalCountedQuantity(
+    message = 'Фактична кількість має бути цілим невід’ємним числом.',
+  ) {
+    return yup
+      .string()
+      .defined()
+      .test('counted-quantity', message, (value) => {
+        const trimmed = value.trim();
+
+        if (trimmed === '') {
+          return true;
+        }
+
+        if (!/^\d+$/.test(trimmed)) {
+          return false;
+        }
+
+        return Number.isSafeInteger(Number(trimmed));
+      })
+  }
+
   money(message = 'Вкажіть суму.') {
     return this.requiredString(message).test(
       'kopecks',

@@ -5,19 +5,22 @@ import { Pressable, ScrollView, Text, View } from 'react-native';
 import { lightTheme } from '@/src/ui-kit';
 
 import { InventoryCard } from '../inventory-card';
-import { useQuery } from '@tanstack/react-query';
 
 type Props = {
+  inventories: InventoryDto[];
+  isLoading: boolean;
   isCreating: boolean;
+  showEmpty: boolean;
   onCreate: () => void;
 };
 
-export const InventoryList = ({ isCreating, onCreate }: Props) => {
-  const { getInventoriesQuery, mutateStartInventory } = useInventoryApi();
-  const { data: inventories = [], isPending: isLoading } = useQuery<InventoryDto[]>(getInventoriesQuery());
-  
-  const isEmpty = !isLoading && inventories.length === 0;
-
+export const InventoryList = ({
+  inventories,
+  isLoading,
+  isCreating,
+  showEmpty,
+  onCreate,
+}: Props) => {
   return (
     <ScrollView className="flex-1" contentContainerClassName="w-full max-w-5xl gap-4">
       <View className="flex-row items-center justify-between gap-4">
@@ -32,17 +35,21 @@ export const InventoryList = ({ isCreating, onCreate }: Props) => {
         </Pressable>
       </View>
 
-      <View className="flex-row flex-wrap justify-between gap-y-3">
-        {isEmpty ? (
-          <Text className="w-full py-12 text-center text-sm text-muted-foreground">
-            Інвентаризацій ще немає
-          </Text>
-        ) : (
-          inventories.map((inventory) => (
+      {isLoading ? <View className="flex-1" /> : null}
+
+      {showEmpty ? (
+        <Text className="w-full py-12 text-center text-sm text-muted-foreground">
+          Інвентаризацій ще немає
+        </Text>
+      ) : null}
+
+      {inventories.length > 0 ? (
+        <View className="flex-row flex-wrap justify-between gap-y-3">
+          {inventories.map((inventory) => (
             <InventoryCard key={inventory.id} inventory={inventory} />
-          ))
-        )}
-      </View>
+          ))}
+        </View>
+      ) : null}
     </ScrollView>
   );
 };
